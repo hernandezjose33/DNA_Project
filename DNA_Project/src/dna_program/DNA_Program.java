@@ -118,8 +118,10 @@ public class DNA_Program {
                     tempBinary = "" + ch;
             }
 
-            completedDNACode += dnaCode;
-            completedComplement += complement;
+            completedDNACode += dnaCode + "|";
+            if(option == 1){
+                completedComplement += complement + "|";
+            }
             //System.out.println(binaryValue);
         }
         System.out.println("The DNA Code is: \t\t" + completedDNACode);
