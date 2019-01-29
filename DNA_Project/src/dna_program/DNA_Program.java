@@ -15,8 +15,13 @@ public class DNA_Program {
         //needed to get user input
         Scanner userInput = new Scanner(System.in);
         String input;
+        int menuOption;
         
-        System.out.println("Enter a string of characters only to convert to DNA code");
+        System.out.println("Convert to DNA - 1");
+        System.out.println("Convert to RNA - 2");
+        menuOption = userInput.nextInt();
+        
+        System.out.println("Enter a string to convert (FROM THE US ALPHABET ONLY)");
         input = userInput.next();
            
         //travese the input string of char
@@ -53,7 +58,14 @@ public class DNA_Program {
                         dnaCode += 'A';
                     }
                     else if ("01".equals(tempBinary)){
-                        dnaCode += 'T';
+                        //check to see if needs to convert to DNA code
+                        if(menuOption == 1){
+                            dnaCode += 'T';
+                        }
+                        //check to see if needs to convert to RNA code
+                        else if(menuOption == 2){
+                            dnaCode += 'U';
+                        }
                     }
                     else if ("10".equals(tempBinary)){
                         dnaCode += 'G';
@@ -61,7 +73,6 @@ public class DNA_Program {
                     else if ("11".equals(tempBinary)){
                         dnaCode += 'C';
                     }
-                    
                 }
                 else
                     //add the current digit to the temp string
