@@ -1,6 +1,7 @@
 /*
     Jose Hernandez
     1/28/2019
+    DNA code
 */
 
 package dna_program;
