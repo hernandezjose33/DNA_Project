@@ -134,9 +134,12 @@ public class DNA_Program {
         }
         
         else{
-            System.out.println("Enter a string to convert (FROM THE US ALPHABET ONLY)");
+            System.out.println("Enter a string to convert (FROM THE U.S. ALPHABET ONLY)");
             input = userInput.next();
-
+            
+            String completedDNACode = "";
+            String completedComplement = "";
+            
             //travese the input string of char
             for(int i =0; i < input.length(); i++){
                 //assign one char at a time to tempChar
@@ -154,6 +157,8 @@ public class DNA_Program {
                 String tempBinary = "";
                 //hold the full DNA code
                 String dnaCode = "";
+                //complementary strand
+                String complement = "";
 
                 //Traverse the binary string to assign the DNA code
                 for (char ch: binaryValue.toCharArray()){
@@ -169,11 +174,13 @@ public class DNA_Program {
                         //check the value then assign the appropriate DNA letter
                         if("00".equals(tempBinary)){
                             dnaCode += 'A';
+                            complement += 'T';
                         }
                         else if ("01".equals(tempBinary)){
                             //check to see if needs to convert to DNA code
                             if(menuOption == 1){
                                 dnaCode += 'T';
+                                complement += 'A';
                             }
                             //check to see if needs to convert to RNA code
                             else if(menuOption == 2){
@@ -182,9 +189,11 @@ public class DNA_Program {
                         }
                         else if ("10".equals(tempBinary)){
                             dnaCode += 'G';
+                            complement += 'C';
                         }
                         else if ("11".equals(tempBinary)){
                             dnaCode += 'C';
+                            complement += 'G';
                         }
                     }
                     else
@@ -192,9 +201,12 @@ public class DNA_Program {
                         tempBinary = "" + ch;
                 }
 
-                System.out.println(dnaCode);
+                completedDNACode += dnaCode;
+                completedComplement += complement;
                 //System.out.println(binaryValue);
             }
+            System.out.println(completedDNACode);
+            System.out.println(completedComplement);
         }
     }
-}
+} 
