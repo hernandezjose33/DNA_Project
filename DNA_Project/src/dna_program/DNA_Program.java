@@ -15,7 +15,7 @@ package dna_program;
 import java.util.Scanner;
 
 public class DNA_Program {
-
+    
     public static void main(String[] args) {
         
         int menuOption = MenuOption();
@@ -119,6 +119,7 @@ public class DNA_Program {
             }
 
             completedDNACode += dnaCode + "|";
+            //prints the complement if option 1 selected
             if(option == 1){
                 completedComplement += complement + "|";
             }
@@ -217,45 +218,98 @@ public class DNA_Program {
         System.out.println("Enter the second DNA strand");
         strand2 = userInput.next();
         
-        int counterStrand1 = 0;
-        String tempStrand1 = "";
-        String dnaSection1 = "";
+        System.out.println(EveryFour(strand1, strand2));
+    }
+    
+    private static String SectionOffEveryFour(String dnaString){
         
-        for(char charStrand1: strand1.toCharArray()){
-            tempStrand1 += charStrand1;
-            System.out.println("tempStrand1: \t" + tempStrand1);
+        
+        //used to store the final string of letters
+        String finalAnswer = "";
+        
+        //used to count intervals of 4
+        int counter = 0;
+        //stores temp section until 4 letters are reached
+        String tempDNASection = "";
+        
+        
+        //traverse user input
+        for(char charStrand1: dnaString.toCharArray()){
+            //add the letter to the temp string
+            tempDNASection += charStrand1;
             
-            if(counterStrand1 < 3){
-                counterStrand1++;
+            //if not on the 4th interval add to counter
+            if(counter < 3){
+                counter++;
             }
+            //now on the 4th interval
             else{
-                counterStrand1 = 0;
-                for(char charSectionStrand1: tempStrand1.toCharArray() ){
+                //reset the counter
+                counter = 0;
+                //traverse the section of the string and assign values
+                for(char charSectionStrand1: tempDNASection.toCharArray() ){
+                    
                     switch(charSectionStrand1){
                         case 'A':
-                            dnaSection1 += "00";
+                            finalAnswer += "A";
+                            counter++;
                             break;
                         case 'T':
-                            dnaSection1 += "01";
+                            finalAnswer += "T";
+                            counter++;
                             break;
                         case 'G':
-                            dnaSection1 += "10";
+                            finalAnswer += "G";
+                            counter++;
                             break;
                         case 'C':
-                            dnaSection1 += "11";
+                            finalAnswer += "C";
+                            counter++;
                             break;
                     }
-                    System.out.println("dnaSection: \t" + dnaSection1);
                 }
+                counter = 0;
+                finalAnswer += "|";
+                //clear out any stored values
+                tempDNASection = "";
             }
         }
+        //prints out the letters as one string
+        return finalAnswer;
+    }
+    
+    private static String EveryFour(String string1, String string2){
+        String newString1 = SectionOffEveryFour(string1);
+        String newString2= SectionOffEveryFour(string2);
         
-        System.out.println(dnaSection1);
-        //need to check every 4 char in the string
+        return Subsequences(newString1, newString2);
+    }
+    
+    private static String Subsequences(String string1, String string2){
+        String newString1;
+        String newString2;
+        int counter1 = string1.length();
+        int counter2 = string2.length();
         
+        //System.out.println("Before if: " + counter1);
         
-        //add counters to keep track of DNA code
+        //check to see if one of the strings ended
+        if(counter1 == 0 || counter2 == 0){
+            //System.out.println("Inside IF: " + counter1);
+            return "";
+        }
         
-        
+        //travers the string from left to right and check to see if there is a match
+        else if(string1.charAt(counter1 - 1) == string2.charAt(counter2 - 1)){
+            //System.out.println("Inside ELSE IF");
+            return Subsequences(string1.substring(0, counter1 - 1), string2.substring(0, counter2 - 1)) + string1.charAt(counter1 - 1);
+        }
+        else{
+            //System.out.println("Inside ELSE");
+            newString1 = Subsequences(string1, string2.substring(0, counter2 - 1));
+            newString2 = Subsequences(string1.substring(0, counter1 - 1), string2);
+        }
+        //System.out.println("Inside RETURN");
+        return (newString1.length() > newString2.length() ? newString1 : newString2);
     }
 } 
