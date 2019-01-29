@@ -2,6 +2,12 @@
     Jose Hernandez
     1/28/2019
     DNA code
+
+    Assuming that the only characters from the ASCII table that we will be using
+    are the letters of the U.S. alphabet.
+
+    Assuming that the directions on screen are being followed so no error catching 
+    was coded.
 */
 
 package dna_program;
@@ -14,12 +20,16 @@ public class DNA_Program {
         
         int menuOption = MenuOption();
         
-        if(menuOption == 3){
-            Option3();
-        }
-        
-        else{
-            Option1Or2(menuOption);
+        switch (menuOption) {
+            case 3:
+                Option3();
+                break;
+            case 4:
+                Option4();
+                break;
+            default:
+                Option1Or2(menuOption);
+                break;
         }
     }
     
@@ -29,6 +39,7 @@ public class DNA_Program {
         System.out.println("Convert to DNA - 1");
         System.out.println("Convert to RNA - 2");
         System.out.println("Convert from DNA to alphabet letters - 3");
+        System.out.println("Compare 2 strands of DNA - 4");
         
         int menuOption = userInput.nextInt();
         
@@ -118,7 +129,10 @@ public class DNA_Program {
     private static void Option3(){
         Scanner userInput = new Scanner(System.in);
         
+        //used to store user input
         String dnaToLetters;
+        //used to store the final string of letters
+        String finalAnswer = "";
         
         //read in the string of DNA
         System.out.println("Enter the DNA code string (IN ALL CAPS)");
@@ -126,105 +140,120 @@ public class DNA_Program {
 
         //check to see if the string is the correct lenght
         if(dnaToLetters.length()%4 != 0){
-            System.out.println("Error -1: does not exist");
+            System.out.println("Error -1: does not exist - not divisible by 4");
         }
-
-        //temp DNA code
-        String tempBinary = "";
-        //holds all the letters
-        int decimalValue;
-        //holds the char of the decimal value
-        String letter;
-        //counter to check every 4 char
+        
+        //used to count intervals of 4
         int counter = 0;
-        //stores the temp DNACode 
-        String tempDNACode = "";
-
-        for(int i = 0; i < dnaToLetters.length(); i++){
-            //System.out.println("start of iteration: " + i);
-
-            if(counter == 4){
-                for (char ch: tempDNACode.toCharArray()){
-
-                    switch (ch) {
+        //stores temp section until 4 letters are reached
+        String tempDNASection = "";
+        //stores the DNA code in binary
+        String dnaInBinary = "";
+        
+        //traverse user input
+        for(char charStrand1: dnaToLetters.toCharArray()){
+            //add the letter to the temp string
+            tempDNASection += charStrand1;
+            
+            //if not on the 4th interval add to counter
+            if(counter < 3){
+                counter++;
+            }
+            //now on the 4th interval
+            else{
+                //reset the counter
+                counter = 0;
+                //traverse the section of the string and assign values
+                for(char charSectionStrand1: tempDNASection.toCharArray() ){
+                    switch(charSectionStrand1){
                         case 'A':
-                            tempBinary += "00";
+                            dnaInBinary += "00";
                             break;
                         case 'T':
-                            tempBinary += "01";
+                            dnaInBinary += "01";
                             break;
                         case 'G':
-                            tempBinary += "10";
+                            dnaInBinary += "10";
                             break;
                         case 'C':
-                            tempBinary += "11";
-                            break;
-                        default:
+                            dnaInBinary += "11";
                             break;
                     }
                 }
-
-                counter = 1;
-                tempDNACode = "";
-                tempDNACode += dnaToLetters.charAt(i);
-
                 //convert the binary string to deciaml value
-                decimalValue = Integer.parseInt(tempBinary, 2);
-                //System.out.println(decimalValue);
-
+                int decimalValue = Integer.parseInt(dnaInBinary, 2);
+                
                 //check to see if decimal value is in the US alphabet
                 if((decimalValue >= 65 && decimalValue <= 90) || (decimalValue >= 97 && decimalValue <= 122)){
                     //convert decimal value to alphabet letter
-                    letter = Character.toString((char) decimalValue);
-                    System.out.println(letter);
+                    String letter = Character.toString((char) decimalValue);
+                    //add to the master string
+                    finalAnswer += letter;
                 }
+                //print error if not in the alphabet
                 else
-                    System.out.println("Error -1: does not exist");
-                tempBinary = "";
+                    System.out.println("Error -1: does not exist - not in the alphabet");
+                
+                //clear out any stored values
+                tempDNASection = "";
+                dnaInBinary = "";
+            }
+        }
+        //prints out the letters as one string
+        System.out.println(finalAnswer);
+    }
+    
+    private static void Option4(){
+        Scanner userInput = new Scanner(System.in);
+        
+        String strand1;
+        String strand2;
+        
+        System.out.println("Enter the first DNA strand");
+        strand1 = userInput.next();
+        
+        System.out.println("Enter the second DNA strand");
+        strand2 = userInput.next();
+        
+        int counterStrand1 = 0;
+        String tempStrand1 = "";
+        String dnaSection1 = "";
+        
+        for(char charStrand1: strand1.toCharArray()){
+            tempStrand1 += charStrand1;
+            System.out.println("tempStrand1: \t" + tempStrand1);
+            
+            if(counterStrand1 < 3){
+                counterStrand1++;
             }
             else{
-                //System.out.println(counter);
-                counter += 1;
-                tempDNACode += dnaToLetters.charAt(i);
-                //System.out.println(tempDNACode);
-                //System.out.println("end of iteration: " + i);
+                counterStrand1 = 0;
+                for(char charSectionStrand1: tempStrand1.toCharArray() ){
+                    switch(charSectionStrand1){
+                        case 'A':
+                            dnaSection1 += "00";
+                            break;
+                        case 'T':
+                            dnaSection1 += "01";
+                            break;
+                        case 'G':
+                            dnaSection1 += "10";
+                            break;
+                        case 'C':
+                            dnaSection1 += "11";
+                            break;
+                    }
+                    System.out.println("dnaSection: \t" + dnaSection1);
+                }
             }
         }
-        for (char ch: tempDNACode.toCharArray()){
-
-            switch (ch) {
-                case 'A':
-                    tempBinary += "00";
-                    break;
-                case 'T':
-                    tempBinary += "01";
-                    break;
-                case 'G':
-                    tempBinary += "10";
-                    break;
-                case 'C':
-                    tempBinary += "11";
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        counter = 1;
-        tempDNACode = "";
-
-        //convert the binary string to deciaml value
-        decimalValue = Integer.parseInt(tempBinary, 2);
-        //System.out.println(decimalValue);
-
-        //check to see if decimal value is in the US alphabet
-        if((decimalValue >= 65 && decimalValue <= 90) || (decimalValue >= 97 && decimalValue <= 122)){
-            //convert decimal value to alphabet letter
-            letter = Character.toString((char) decimalValue);
-            System.out.println(letter);
-        }
-        else
-            System.out.println("Error -1: does not exist");
-        tempBinary = "";
+        
+        System.out.println(dnaSection1);
+        //need to check every 4 char in the string
+        
+        
+        //add counters to keep track of DNA code
+        
+        
     }
 } 
