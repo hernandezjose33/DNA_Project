@@ -6,8 +6,6 @@
 
 package dna_program;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
 
 public class DNA_Program {
@@ -18,71 +16,63 @@ public class DNA_Program {
         Scanner userInput = new Scanner(System.in);
         String input;
         
-        //A map that stores the appropriate DNA code with its respective character
-        Map<String, String> alphabetMap = new HashMap<String, String>();
-        alphabetMap.put("A", "TAAT");
-        alphabetMap.put("B", "TAAG");
-        alphabetMap.put("C", "TAAC");
-        alphabetMap.put("D", "TATA");
-        alphabetMap.put("E", "TATT");
-        alphabetMap.put("F", "TATG");
-        alphabetMap.put("G", "TATC");
-        alphabetMap.put("H", "TAGA");
-        alphabetMap.put("I", "TAGT");
-        alphabetMap.put("J", "TAGG");
-        alphabetMap.put("K", "TAGC");
-        alphabetMap.put("L", "TACA");
-        alphabetMap.put("M", "TACT");
-        alphabetMap.put("N", "TACG");
-        alphabetMap.put("O", "TACC");
-        alphabetMap.put("P", "TTAA");
-        alphabetMap.put("Q", "TTAT");
-        alphabetMap.put("R", "TTAG");
-        alphabetMap.put("S", "TTAC");
-        alphabetMap.put("T", "TTTA");
-        alphabetMap.put("U", "TTTT");
-        alphabetMap.put("V", "TTTG");
-        alphabetMap.put("W", "TTTC");
-        alphabetMap.put("X", "TTGA");
-        alphabetMap.put("Y", "TTGT");
-        alphabetMap.put("Z", "TTGG");
-        alphabetMap.put("a", "TGAT");
-        alphabetMap.put("b", "TGAG");
-        alphabetMap.put("c", "TGAC");
-        alphabetMap.put("d", "TGTA");
-        alphabetMap.put("e", "TGTT");
-        alphabetMap.put("f", "TGTG");
-        alphabetMap.put("g", "TGTC");
-        alphabetMap.put("h", "TGGA");
-        alphabetMap.put("i", "TGGT");
-        alphabetMap.put("j", "TGGG");
-        alphabetMap.put("k", "TGGC");
-        alphabetMap.put("l", "TGCA");
-        alphabetMap.put("m", "TGCT");
-        alphabetMap.put("n", "TGCG");
-        alphabetMap.put("o", "TGCC");
-        alphabetMap.put("p", "TCAA");
-        alphabetMap.put("q", "TCAT");
-        alphabetMap.put("r", "TCAG");
-        alphabetMap.put("s", "TCAC");
-        alphabetMap.put("t", "TCTA");
-        alphabetMap.put("u", "TCTT");
-        alphabetMap.put("v", "TCTG");
-        alphabetMap.put("w", "TCTC");
-        alphabetMap.put("x", "TCGA");
-        alphabetMap.put("y", "TCGT");
-        alphabetMap.put("z", "TCGG");
-        
         System.out.println("Enter a string of characters only to convert to DNA code");
         input = userInput.next();
-        
-        for (char ch: input.toCharArray()) {
-            //need to convert the char to a string 
-            String temp = "" + ch;
+           
+        //travese the input string of char
+        for(int i =0; i < input.length(); i++){
+            //assign one char at a time to tempChar
+            char tempChar = input.charAt(i);
             
-            //passed the temp value to retrieve that char's value
-            System.out.println(alphabetMap.get(temp));
+            //convert to ascii decimal value
+            int asciiValue = (int) tempChar;
+            
+            //convert to binary and add a 0 of padding
+            String binaryValue = String.format("%8s", Integer.toBinaryString(asciiValue)).replace(' ', '0');
+            
+            //used to iterate every 2 char
+            int counter =0;
+            //holds a temp 2 digit string to compare to DNA letters
+            String tempBinary = "";
+            //hold the full DNA code
+            String dnaCode = "";
+            
+            //Traverse the binary string to assign the DNA code
+            for (char ch: binaryValue.toCharArray()){
+                counter += 1;
+                
+                //checks to see if it is on second char
+                if(counter == 2){
+                    counter = 0;
+                    //add the current digit to the temp string
+                    tempBinary += ch;
+                    //System.out.println(tempBinary);
+                    
+                    //check the value then assign the appropriate DNA letter
+                    if("00".equals(tempBinary)){
+                        dnaCode += 'A';
+                    }
+                    else if ("01".equals(tempBinary)){
+                        dnaCode += 'T';
+                    }
+                    else if ("10".equals(tempBinary)){
+                        dnaCode += 'G';
+                    }
+                    else if ("11".equals(tempBinary)){
+                        dnaCode += 'C';
+                    }
+                    
+                }
+                else
+                    //add the current digit to the temp string
+                    tempBinary = "" + ch;
+            }
+            
+            System.out.println(dnaCode);
+            //System.out.println(binaryValue);
+            
         }
+        
         
     }
     
